@@ -55,6 +55,10 @@ Future<List<Liver>> fetchLive() async {
   }
 }
 
+void refresh_press() {
+  print("refresh the page");
+}
+
 class _MyStatefulWidgetState extends State<MyStatefulWidget> {
   Future<List<Liver>> _liverList;
   @override
@@ -73,7 +77,11 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
       ),
       home: Scaffold(
         appBar: AppBar(
-          title: Text('Fetch data example'),
+          title: Text('Now Live'),
+          actions: [
+            IconButton(
+                icon: const Icon(Icons.refresh), onPressed: refresh_press)
+          ],
         ),
         body: Center(
           child: FutureBuilder<List<Liver>>(
@@ -81,9 +89,16 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
             builder: (context, snapshot) {
               if (snapshot.hasData) {
                 return ListView.builder(
+                  padding: EdgeInsets.all(5),
                   itemCount: snapshot.data.length,
                   itemBuilder: (context, index) {
-                    return Text(snapshot.data[index].title);
+                    return ListTile(
+                      leading: FlutterLogo(
+                        size: 40,
+                      ),
+                      title: Text(snapshot.data[index].id),
+                      subtitle: Text(snapshot.data[index].group),
+                    );
                   },
                 );
               } else if (snapshot.hasError) {
